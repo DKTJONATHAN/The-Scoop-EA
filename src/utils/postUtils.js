@@ -7,7 +7,7 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const postsDirectory = path.join(__dirname, '../content/posts');
+const postsDirectory = path.join(__dirname, '../../content/posts'); // Adjusted for src/Utils
 
 export function readPosts() {
   // Ensure the posts directory exists
