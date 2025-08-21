@@ -1,9 +1,11 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import postsData from '../content/posts.json';
 
 const Post = () => {
-  const { slug } = useParams();
+  // Get the slug from the URL
+  const pathParts = window.location.pathname.split('/');
+  const slug = pathParts[pathParts.length - 1];
+  
   const post = postsData.find(p => p.slug === slug);
 
   if (!post) {
@@ -33,10 +35,7 @@ const Post = () => {
             onClick={() => window.location.href = '/'}
             className="text-orange-500 font-medium hover:text-orange-600 flex items-center gap-2"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Home
+            ← Back to Home
           </button>
         </div>
       </nav>
@@ -50,11 +49,7 @@ const Post = () => {
               {post.frontmatter.category}
             </span>
             <span className="text-gray-600 text-sm">
-              {new Date(post.frontmatter.date).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
+              {new Date(post.frontmatter.date).toLocaleDateString()}
             </span>
             <span className="text-gray-600 text-sm">•</span>
             <span className="text-gray-600 text-sm">{post.frontmatter.readTime}</span>
@@ -64,7 +59,7 @@ const Post = () => {
             {post.frontmatter.title}
           </h1>
 
-          <p className="text-xl text-gray-600 mb-6 leading-relaxed">
+          <p className="text-xl text-gray-600 mb-6">
             {post.frontmatter.description}
           </p>
 
@@ -91,13 +86,10 @@ const Post = () => {
         )}
 
         {/* Content */}
-        <div className="prose prose-lg max-w-none">
-          <div 
-            className="text-gray-700 leading-8"
-            dangerouslySetInnerHTML={{ 
-              __html: post.content.replace(/\n/g, '<br/>').replace(/\#\#\#\# (.*)/g, '<h4>$1</h4>').replace(/\#\#\# (.*)/g, '<h3>$1</h3>').replace(/\#\# (.*)/g, '<h2>$1</h2>').replace(/\# (.*)/g, '<h1>$1</h1>')
-            }}
-          />
+        <div className="text-gray-700 leading-8 text-lg">
+          {post.content.split('\n').map((paragraph, index) => (
+            <p key={index} className="mb-6">{paragraph}</p>
+          ))}
         </div>
 
         {/* Tags */}
@@ -108,8 +100,7 @@ const Post = () => {
               {post.frontmatter.tags.map(tag => (
                 <span
                   key={tag}
-                  className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-orange-100 hover:text-orange-700 transition-colors cursor-pointer"
-                  onClick={() => window.location.href = `/?category=${tag}`}
+                  className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
                 >
                   #{tag}
                 </span>
@@ -117,24 +108,6 @@ const Post = () => {
             </div>
           </div>
         )}
-
-        {/* Related Posts or Newsletter */}
-        <div className="mt-12 bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-2xl p-8 text-center">
-          <h3 className="text-2xl font-bold mb-4">Want More Scoops? 🍵</h3>
-          <p className="text-gray-300 mb-6">
-            Get the latest celebrity gossip and entertainment news delivered straight to your inbox!
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="px-6 py-3 rounded-lg bg-white text-gray-800 placeholder-gray-500 flex-1 max-w-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-            <button className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all">
-              Subscribe Now
-            </button>
-          </div>
-        </div>
       </article>
     </div>
   );
