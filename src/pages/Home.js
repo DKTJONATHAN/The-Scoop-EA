@@ -1,19 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { readPosts } from '../utils/postUtils.js'; // Updated import path
 
 const Home = () => {
   const [postsData, setPostsData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch posts dynamically when the component mounts
+  // Fetch posts from API when the component mounts
   useEffect(() => {
-    try {
-      const posts = readPosts();
-      setPostsData(posts);
-    } catch (error) {
-      console.error('Error fetching posts:', error.message);
-      setPostsData([]);
-    }
+    const fetchPosts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/posts');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const posts = await response.json();
+        setPostsData(posts);
+        setError(null);
+      } catch (error) {
+        console.error('Error fetching posts:', error.message);
+        setError('Failed to load posts. Please try again later.');
+        setPostsData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
   }, []);
 
   // Get all unique categories from posts
@@ -27,6 +43,35 @@ const Home = () => {
   // Find featured post and regular posts
   const featuredPost = postsData.find(post => post.frontmatter.featured);
   const regularPosts = filteredPosts.filter(post => !post.frontmatter.featured);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading the latest gossip...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">😢</div>
+          <h3 className="text-2xl font-bold text-gray-700 mb-2">Oops! Something went wrong</h3>
+          <p className="text-gray-500 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-orange-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-orange-600 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -44,23 +89,25 @@ const Home = () => {
 
       <div className="container mx-auto px-4">
         {/* Category Filter */}
-        <div className="mb-8">
-          <div className="flex flex-wrap gap-2 justify-center">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
-                  selectedCategory === category
-                    ? 'bg-orange-500 text-white shadow-lg'
-                    : 'bg-white text-gray-700 hover:bg-orange-100 shadow-md'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
+        {categories.length > 1 && (
+          <div className="mb-8">
+            <div className="flex flex-wrap gap-2 justify-center">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
+                    selectedCategory === category
+                      ? 'bg-orange-500 text-white shadow-lg'
+                      : 'bg-white text-gray-700 hover:bg-orange-100 shadow-md'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Featured Post */}
         {featuredPost && (
