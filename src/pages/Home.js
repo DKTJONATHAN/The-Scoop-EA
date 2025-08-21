@@ -14,7 +14,7 @@ const Home = () => {
         const response = await fetch('/api/posts');
         
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`Failed to load posts: ${response.status}`);
         }
         
         const posts = await response.json();
@@ -33,16 +33,16 @@ const Home = () => {
   }, []);
 
   // Get all unique categories from posts
-  const categories = ['All', ...new Set(postsData.map(post => post.frontmatter.category).filter(Boolean))];
+  const categories = ['All', ...new Set(postsData.map(post => post.frontmatter?.category).filter(Boolean))];
 
   // Filter posts based on selected category
   const filteredPosts = selectedCategory === 'All'
     ? postsData
-    : postsData.filter(post => post.frontmatter.category === selectedCategory);
+    : postsData.filter(post => post.frontmatter?.category === selectedCategory);
 
   // Find featured post and regular posts
-  const featuredPost = postsData.find(post => post.frontmatter.featured);
-  const regularPosts = filteredPosts.filter(post => !post.frontmatter.featured);
+  const featuredPost = postsData.find(post => post.frontmatter?.featured);
+  const regularPosts = filteredPosts.filter(post => !post.frontmatter?.featured);
 
   if (loading) {
     return (
