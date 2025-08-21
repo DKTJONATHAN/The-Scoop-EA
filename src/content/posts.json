@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "post1",
+    "frontmatter": {
+      "title": "Breaking News!",
+      "date": "2025-08-21",
+      "author": "Scoop Team"
+    },
+    "content": "A celebrity was spotted in Nairobi today, causing a stir among fans!"
+  },
+  {
+    "slug": "post2",
+    "frontmatter": {
+      "title": "Hot Rumor",
+      "date": "2025-08-20",
+      "author": "Gossip Guru"
+    },
+    "content": "New romance rumors are swirling in Hollywood—details are still emerging!"
+  }
+]
