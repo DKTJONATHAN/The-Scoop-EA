@@ -53,7 +53,17 @@ const Home = () => {
             <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
               🔥 Featured Story
             </h2>
-            <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-2xl overflow-hidden shadow-xl">
+            <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
+              {/* Featured Post Image */}
+              {featuredPost.frontmatter.image && (
+                <div className="w-full h-64 md:h-96 overflow-hidden">
+                  <img 
+                    src={featuredPost.frontmatter.image} 
+                    alt={featuredPost.frontmatter.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
               <div className="p-8 md:p-12">
                 <div className="flex flex-wrap items-center gap-4 mb-4">
                   <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">
@@ -66,12 +76,18 @@ const Home = () => {
                       day: 'numeric'
                     })}
                   </span>
+                  <span className="text-gray-600 text-sm">
+                    {featuredPost.frontmatter.readTime}
+                  </span>
                 </div>
                 <h3 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
                   {featuredPost.frontmatter.title}
                 </h3>
                 <p className="text-gray-600 text-lg mb-6 leading-relaxed">
                   {featuredPost.frontmatter.description || featuredPost.frontmatter.excerpt}
+                </p>
+                <p className="text-gray-500 mb-4">
+                  By <span className="font-semibold">{featuredPost.frontmatter.author}</span>
                 </p>
                 <button 
                   onClick={() => window.location.href = `/post/${featuredPost.slug}`}
@@ -97,6 +113,16 @@ const Home = () => {
                   key={post.slug}
                   className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
                 >
+                  {/* Post Image */}
+                  {post.frontmatter.image && (
+                    <div className="w-full h-48 overflow-hidden">
+                      <img 
+                        src={post.frontmatter.image} 
+                        alt={post.frontmatter.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
                   <div className="p-6">
                     <div className="flex flex-wrap items-center gap-2 mb-4">
                       <span className="bg-orange-100 text-orange-700 px-2 py-1 rounded-full text-xs font-medium">
@@ -117,15 +143,20 @@ const Home = () => {
                       </p>
                     )}
                     
-                    <button 
-                      onClick={() => window.location.href = `/post/${post.slug}`}
-                      className="text-orange-500 font-medium hover:text-orange-600 transition-colors duration-300 flex items-center gap-2"
-                    >
-                      Read More
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-500 text-sm">
+                        By {post.frontmatter.author}
+                      </span>
+                      <button 
+                        onClick={() => window.location.href = `/post/${post.slug}`}
+                        className="text-orange-500 font-medium hover:text-orange-600 transition-colors duration-300 flex items-center gap-2"
+                      >
+                        Read More
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
