@@ -8,6 +8,35 @@ const Post = () => {
   
   const post = postsData.find(p => p.slug === slug);
 
+  // Function to convert markdown to HTML
+  const renderMarkdown = (content) => {
+    return content
+      // Headers
+      .replace(/^##### (.*$)/gim, '<h5>$1</h5>')
+      .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
+      .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+      .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+      .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+      // Bold and Italic
+      .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+      // Links
+      .replace(/\[([^\[]+)\]\(([^\)]+)\)/gim, '<a href="$2" class="text-orange-500 hover:text-orange-600 underline" target="_blank" rel="noopener">$1</a>')
+      // Images
+      .replace(/\!\[([^\[]+)\]\(([^\)]+)\)/gim, '<img src="$2" alt="$1" class="rounded-lg my-4 max-w-full h-auto" />')
+      // Line breaks
+      .replace(/\n$/gim, '<br />')
+      // Paragraphs
+      .split('\n\n')
+      .map(paragraph => {
+        if (!paragraph.startsWith('<')) {
+          return `<p>${paragraph}</p>`;
+        }
+        return paragraph;
+      })
+      .join('');
+  };
+
   if (!post) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -86,11 +115,10 @@ const Post = () => {
         )}
 
         {/* Content */}
-        <div className="text-gray-700 leading-8 text-lg">
-          {post.content.split('\n').map((paragraph, index) => (
-            <p key={index} className="mb-6">{paragraph}</p>
-          ))}
-        </div>
+        <div 
+          className="prose prose-lg max-w-none text-gray-700 leading-8"
+          dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content) }}
+        />
 
         {/* Tags */}
         {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
@@ -100,7 +128,8 @@ const Post = () => {
               {post.frontmatter.tags.map(tag => (
                 <span
                   key={tag}
-                  className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                  className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-orange-100 hover:text-orange-700 transition-colors cursor-pointer"
+                  onClick={() => navigate(`/?category=${tag}`)}
                 >
                   #{tag}
                 </span>
@@ -108,6 +137,24 @@ const Post = () => {
             </div>
           </div>
         )}
+
+        {/* Newsletter Signup */}
+        <div className="mt-12 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl p-8 text-center">
+          <h3 className="text-2xl font-bold mb-4">Want More Hot Scoops? 🔥</h3>
+          <p className="text-orange-100 mb-6">
+            Get the latest celebrity gossip delivered straight to your inbox!
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="px-6 py-3 rounded-lg bg-white text-gray-800 placeholder-gray-500 flex-1 max-w-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+            <button className="px-8 py-3 bg-white text-orange-600 rounded-lg font-medium hover:bg-gray-100 transition-all">
+              Subscribe Now
+            </button>
+          </div>
+        </div>
       </article>
     </div>
   );
