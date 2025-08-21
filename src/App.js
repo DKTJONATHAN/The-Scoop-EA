@@ -11,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout><Home /></MainLayout>} />
         <Route path="/about" element={<MainLayout><About /></MainLayout>} />
+        <Route path="/post/:slug" element={<MainLayout><Post /></MainLayout>} />
       </Routes>
     </Router>
   );
