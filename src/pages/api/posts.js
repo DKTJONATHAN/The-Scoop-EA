@@ -4,24 +4,17 @@ import matter from 'gray-matter';
 
 export default function handler(req, res) {
   try {
-    // Use process.cwd() to get the root directory of the project
+    // Find the posts directory
     const postsDirectory = path.join(process.cwd(), 'src/content/posts');
-    
-    console.log('Looking for posts in:', postsDirectory);
     
     // Check if directory exists
     if (!fs.existsSync(postsDirectory)) {
-      console.error('Posts directory not found at:', postsDirectory);
-      return res.status(404).json({ 
-        error: 'Posts directory not found',
-        path: postsDirectory 
-      });
+      return res.status(200).json([]);
     }
 
     // Read all markdown files
     const postFiles = fs.readdirSync(postsDirectory).filter(file => file.endsWith('.md'));
-    console.log('Found files:', postFiles);
-
+    
     const posts = postFiles.map(file => {
       try {
         const filePath = path.join(postsDirectory, file);
@@ -34,19 +27,18 @@ export default function handler(req, res) {
           frontmatter: {
             title: frontmatter.title || 'Untitled',
             description: frontmatter.description || '',
-            author: frontmatter.author || 'Unknown Author',
+            author: frontmatter.author || 'Unknown',
             date: frontmatter.date || new Date().toISOString().split('T')[0],
             image: frontmatter.image || '',
-            category: frontmatter.category || 'Uncategorized',
-            tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : [],
-            slug: frontmatter.slug || slug,
+            category: frontmatter.category || 'General',
+            tags: frontmatter.tags || [],
             featured: frontmatter.featured || false,
-            readTime: frontmatter.readTime || 'Unknown'
+            readTime: frontmatter.readTime || '2 min read'
           },
           content
         };
       } catch (err) {
-        console.error(`Error processing file ${file}:`, err.message);
+        console.error('Error processing file:', err);
         return null;
       }
     }).filter(post => post !== null);
@@ -56,14 +48,10 @@ export default function handler(req, res) {
       new Date(b.frontmatter.date) - new Date(a.frontmatter.date)
     );
 
-    console.log('Successfully processed', sortedPosts.length, 'posts');
     res.status(200).json(sortedPosts);
 
   } catch (error) {
-    console.error('Error in API route:', error);
-    res.status(500).json({ 
-      error: 'Internal server error',
-      message: error.message 
-    });
+    console.error('API Error:', error);
+    res.status(500).json({ error: 'Failed to load posts' });
   }
 }
