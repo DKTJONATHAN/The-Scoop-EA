@@ -1,15 +1,13 @@
 import React from 'react';
 import GossipCard from '../components/GossipCard';
-import { readPosts } from '../utils/postUtils';
+import postsData from '../content/posts.json';
 
 const Home = () => {
-  const posts = readPosts();
-
   return (
     <div>
       <h2 className="text-3xl font-bold text-gray-800 mb-6">Latest Gossip</h2>
-      {posts.length > 0 ? (
-        posts.map((post) => (
+      {postsData.length > 0 ? (
+        postsData.map((post) => (
           <GossipCard
             key={post.slug}
             title={post.frontmatter.title}
