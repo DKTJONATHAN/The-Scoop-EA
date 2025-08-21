@@ -10,20 +10,52 @@ const __dirname = dirname(__filename);
 const postsDirectory = path.join(__dirname, '../content/posts');
 
 export function readPosts() {
-  const postFiles = fs.readdirSync(postsDirectory).filter(file => file.endsWith('.md'));
+  // Ensure the posts directory exists
+  if (!fs.existsSync(postsDirectory)) {
+    console.error('Error: Posts directory does not exist at', postsDirectory);
+    return [];
+  }
 
-  const posts = postFiles.map(file => {
-    const filePath = path.join(postsDirectory, file);
-    const fileContents = fs.readFileSync(filePath, 'utf8');
-    const { data: frontmatter, content } = matter(fileContents);
-    const slug = file.replace('.md', '');
+  try {
+    // Read all markdown files in the posts directory
+    const postFiles = fs.readdirSync(postsDirectory).filter(file => file.endsWith('.md'));
 
-    return {
-      frontmatter,
-      content,
-      slug,
-    };
-  });
+    const posts = postFiles
+      .map(file => {
+        try {
+          const filePath = path.join(postsDirectory, file);
+          const fileContents = fs.readFileSync(filePath, 'utf8');
+          const { data: frontmatter, content } = matter(fileContents);
+          const slug = file.replace('.md', '');
 
-  return posts.sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
+          // Standardize frontmatter to match post1.md structure
+          return {
+            slug,
+            frontmatter: {
+              title: frontmatter.title || 'Untitled',
+              description: frontmatter.description || '',
+              author: frontmatter.author || 'Unknown Author',
+              date: frontmatter.date || new Date().toISOString().split('T')[0],
+              image: frontmatter.image || '',
+              category: frontmatter.category || 'Uncategorized',
+              tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : [],
+              slug: frontmatter.slug || slug,
+              featured: frontmatter.featured || false,
+              readTime: frontmatter.readTime || 'Unknown'
+            },
+            content
+          };
+        } catch (err) {
+          console.error(`Error processing file ${file}:`, err.message);
+          return null;
+        }
+      })
+      .filter(post => post !== null); // Remove any failed posts
+
+    // Sort posts by date (newest first)
+    return posts.sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
+  } catch (err) {
+    console.error('Error reading posts:', err.message);
+    return [];
+  }
 }
