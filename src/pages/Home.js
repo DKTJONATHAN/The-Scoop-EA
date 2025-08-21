@@ -1,54 +1,10 @@
 import React, { useState } from 'react';
-
-// Mock data for demonstration - replace with your actual imports
-const mockPosts = [
-  {
-    slug: 'celebrity-scandal-2024',
-    frontmatter: {
-      title: 'Breaking: Major Celebrity Scandal Rocks Hollywood',
-      date: '2024-08-20',
-      category: 'Celebrity News',
-      featured: true,
-      excerpt: 'Exclusive details about the latest scandal that has everyone talking...'
-    }
-  },
-  {
-    slug: 'music-awards-drama',
-    frontmatter: {
-      title: 'Drama Unfolds at Music Awards Ceremony',
-      date: '2024-08-19',
-      category: 'Music',
-      featured: false,
-      excerpt: 'Behind-the-scenes drama from last night\'s awards show...'
-    }
-  },
-  {
-    slug: 'social-media-beef',
-    frontmatter: {
-      title: 'Social Media Beef Between Top Influencers',
-      date: '2024-08-18',
-      category: 'Social Media',
-      featured: false,
-      excerpt: 'The internet is buzzing about this latest feud...'
-    }
-  },
-  {
-    slug: 'fashion-week-secrets',
-    frontmatter: {
-      title: 'Fashion Week Secrets Revealed',
-      date: '2024-08-17',
-      category: 'Fashion',
-      featured: false,
-      excerpt: 'What really happens behind the scenes at fashion week...'
-    }
-  }
-];
+import postsData from '../content/posts.json';
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const postsData = mockPosts; // Replace with your actual postsData import
-  
-  const categories = ['All', 'Celebrity News', 'Music', 'Social Media', 'Fashion'];
+  // Get all unique categories from your posts
+  const categories = ['All', ...new Set(postsData.map(post => post.frontmatter.category).filter(Boolean))];
   
   const filteredPosts = selectedCategory === 'All' 
     ? postsData 
@@ -117,7 +73,10 @@ const Home = () => {
                 <p className="text-gray-600 text-lg mb-6 leading-relaxed">
                   {featuredPost.frontmatter.excerpt}
                 </p>
-                <button className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-3 rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                <button 
+                  onClick={() => window.location.href = `/post/${featuredPost.slug}`}
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-3 rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
                   Read Full Story →
                 </button>
               </div>
@@ -158,7 +117,10 @@ const Home = () => {
                       </p>
                     )}
                     
-                    <button className="text-orange-500 font-medium hover:text-orange-600 transition-colors duration-300 flex items-center gap-2">
+                    <button 
+                      onClick={() => window.location.href = `/post/${post.slug}`}
+                      className="text-orange-500 font-medium hover:text-orange-600 transition-colors duration-300 flex items-center gap-2"
+                    >
                       Read More
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
