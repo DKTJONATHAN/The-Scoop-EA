@@ -1,17 +1,32 @@
-import React, { useState } from 'react';
-import postsData from '../content/posts.json';
+import React, { useState, useEffect } from 'react';
+import { readPosts } from '../scripts/postUtils';
 
 const Home = () => {
+  const [postsData, setPostsData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
-  // Get all unique categories from your posts
+
+  // Fetch posts dynamically when the component mounts
+  useEffect(() => {
+    try {
+      const posts = readPosts();
+      setPostsData(posts);
+    } catch (error) {
+      console.error('Error fetching posts:', error.message);
+      setPostsData([]);
+    }
+  }, []);
+
+  // Get all unique categories from posts
   const categories = ['All', ...new Set(postsData.map(post => post.frontmatter.category).filter(Boolean))];
-  
-  const filteredPosts = selectedCategory === 'All' 
-    ? postsData 
+
+  // Filter posts based on selected category
+  const filteredPosts = selectedCategory === 'All'
+    ? postsData
     : postsData.filter(post => post.frontmatter.category === selectedCategory);
-  
+
+  // Find featured post and regular posts
   const featuredPost = postsData.find(post => post.frontmatter.featured);
-  const regularPosts = postsData.filter(post => !post.frontmatter.featured);
+  const regularPosts = filteredPosts.filter(post => !post.frontmatter.featured);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -71,9 +86,9 @@ const Home = () => {
                   {featuredPost.frontmatter.title}
                 </h3>
                 <p className="text-gray-600 text-lg mb-6 leading-relaxed">
-                  {featuredPost.frontmatter.excerpt}
+                  {featuredPost.frontmatter.description}
                 </p>
-                <button 
+                <button
                   onClick={() => window.location.href = `/post/${featuredPost.slug}`}
                   className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-3 rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
@@ -89,10 +104,10 @@ const Home = () => {
           <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
             Latest Gossip & Entertainment News
           </h2>
-          
-          {filteredPosts.length > 0 ? (
+
+          {regularPosts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredPosts.map((post) => (
+              {regularPosts.map((post) => (
                 <div
                   key={post.slug}
                   className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
@@ -106,18 +121,18 @@ const Home = () => {
                         {new Date(post.frontmatter.date).toLocaleDateString()}
                       </span>
                     </div>
-                    
+
                     <h3 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2">
                       {post.frontmatter.title}
                     </h3>
-                    
-                    {post.frontmatter.excerpt && (
+
+                    {post.frontmatter.description && (
                       <p className="text-gray-600 mb-4 line-clamp-3">
-                        {post.frontmatter.excerpt}
+                        {post.frontmatter.description}
                       </p>
                     )}
-                    
-                    <button 
+
+                    <button
                       onClick={() => window.location.href = `/post/${post.slug}`}
                       className="text-orange-500 font-medium hover:text-orange-600 transition-colors duration-300 flex items-center gap-2"
                     >
@@ -135,33 +150,13 @@ const Home = () => {
               <div className="text-6xl mb-4">📰</div>
               <h3 className="text-2xl font-bold text-gray-700 mb-2">No Stories Yet</h3>
               <p className="text-gray-500 text-lg">
-                {selectedCategory === 'All' 
+                {selectedCategory === 'All'
                   ? "No gossip posts available yet. Check back soon for the latest entertainment news!"
                   : `No stories in "${selectedCategory}" category yet. Try another category or check back later!`
                 }
               </p>
             </div>
           )}
-        </div>
-
-        {/* Newsletter Signup Section */}
-        <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-2xl p-8 mb-12">
-          <div className="text-center max-w-2xl mx-auto">
-            <h3 className="text-3xl font-bold mb-4">Never Miss the Tea ☕</h3>
-            <p className="text-gray-300 mb-6 text-lg">
-              Be the first to know about celebrity drama, entertainment news, and exclusive scoops!
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="px-6 py-3 rounded-lg bg-white text-gray-800 placeholder-gray-500 flex-1 max-w-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-              <button className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-medium hover:from-orange-600 hover:to-orange-700 transition-all duration-300 whitespace-nowrap">
-                Get The Scoop! 🔥
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
