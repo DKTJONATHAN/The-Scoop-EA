@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { readPosts } from '../scripts/postUtils';
+import { readPosts } from '../Utils/postUtils.js'; // Updated import path
 
 const Home = () => {
   const [postsData, setPostsData] = useState([]);
