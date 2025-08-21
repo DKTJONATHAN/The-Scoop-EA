@@ -12,10 +12,13 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "prebuild": "node generate-posts.js",
     "build": "react-scripts build",
+    "prestart": "node generate-posts.js",
+    "start": "react-scripts start",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "generate-posts": "node generate-posts.js"
   },
   "eslintConfig": {
     "extends": [
