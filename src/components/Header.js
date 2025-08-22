@@ -11,15 +11,19 @@ const Header = () => {
 
   return (
     <header className="bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 text-white shadow-lg relative">
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 sm:px-6 py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <img src={logo} alt="The Scoop EA Logo" className="h-12 w-12 rounded-full object-cover shadow-md" />
+            <img 
+              src={logo} 
+              alt="The Scoop EA Logo" 
+              className="h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover shadow-md" 
+            />
           </Link>
 
-          {/* Center Title */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
+          {/* Center Title (Desktop) */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:flex items-center">
             <h1 className="text-3xl font-bold tracking-wide">
               <span className="text-white">The Scoop </span>
               <span className="text-black">EA</span>
@@ -51,12 +55,12 @@ const Header = () => {
           {/* Hamburger Menu Button for Mobile */}
           <button
             onClick={toggleMobileMenu}
-            className="md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1.5 focus:outline-none"
+            className="md:hidden flex flex-col justify-center items-center w-10 h-10 space-y-1 focus:outline-none"
             aria-label="Toggle mobile menu"
           >
             <span 
               className={`block h-0.5 w-6 bg-white transform transition-all duration-300 ${
-                isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
+                isMobileMenuOpen ? 'rotate-45 translate-y-2.5' : ''
               }`}
             />
             <span 
@@ -66,15 +70,15 @@ const Header = () => {
             />
             <span 
               className={`block h-0.5 w-6 bg-white transform transition-all duration-300 ${
-                isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
+                isMobileMenuOpen ? '-rotate-45 -translate-y-2.5' : ''
               }`}
             />
           </button>
         </div>
 
         {/* Mobile Title (shown when menu is closed) */}
-        <div className="md:hidden mt-3 text-center">
-          <h1 className="text-2xl font-bold tracking-wide">
+        <div className="md:hidden text-center py-2">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-wide">
             <span className="text-white">The Scoop </span>
             <span className="text-black">EA</span>
           </h1>
@@ -83,15 +87,15 @@ const Header = () => {
         {/* Mobile Navigation Menu */}
         <div 
           className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            isMobileMenuOpen ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
+            isMobileMenuOpen ? 'max-h-96 opacity-100 mt-2' : 'max-h-0 opacity-0'
           }`}
         >
           <nav className="bg-gradient-to-b from-orange-600 to-orange-700 rounded-lg shadow-inner">
-            <ul className="flex flex-col space-y-2 p-4">
+            <ul className="flex flex-col space-y-1 p-3">
               <li>
                 <Link 
                   to="/" 
-                  className="block text-white hover:text-orange-200 hover:bg-orange-500 px-4 py-3 rounded-md transition-all duration-200 font-medium"
+                  className="block text-white hover:text-orange-200 hover:bg-orange-500 px-3 py-2 rounded-md transition-all duration-200 font-medium text-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Home
@@ -100,7 +104,7 @@ const Header = () => {
               <li>
                 <Link 
                   to="/about" 
-                  className="block text-white hover:text-orange-200 hover:bg-orange-500 px-4 py-3 rounded-md transition-all duration-200 font-medium"
+                  className="block text-white hover:text-orange-200 hover:bg-orange-500 px-3 py-2 rounded-md transition-all duration-200 font-medium text-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   About
