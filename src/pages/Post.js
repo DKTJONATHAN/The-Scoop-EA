@@ -160,7 +160,7 @@ const Post = () => {
     };
   }, [post]);
 
-  // Function to convert markdown to HTML
+  // Function to convert markdown to HTML - FIXED VERSION
   const renderMarkdown = (content) => {
     let html = content
       // Headers
@@ -207,16 +207,6 @@ const Post = () => {
       `;
     });
 
-    // Process images
-    html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, src) => {
-      return `
-        <div class="my-8">
-          <img src="${src.trim()}" alt="${alt.trim() || 'Post image'}" class="w-full h-auto rounded-lg shadow-md" loading="lazy" />
-          ${alt.trim() ? `<p class="text-center text-gray-500 text-sm mt-2">${alt.trim()}</p>` : ''}
-        </div>
-      `;
-    });
-
     // Process code blocks
     html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, language, code) => {
       return `
@@ -248,15 +238,15 @@ const Post = () => {
       return `<ol class="list-decimal my-6 pl-6">${match}</ol>`;
     });
 
-    // Process paragraphs and line breaks
+    // Process paragraphs and line breaks - FIXED to preserve existing HTML
     html = html
       .split('\n\n')
       .map(paragraph => {
         paragraph = paragraph.trim();
         if (!paragraph) return '';
 
-        // Skip if it's already processed HTML
-        if (paragraph.startsWith('<')) {
+        // Skip if it's already processed HTML (like images, tables, etc.)
+        if (paragraph.startsWith('<') || paragraph.includes('</')) {
           return paragraph;
         }
 
@@ -271,6 +261,16 @@ const Post = () => {
         return `<p class="mb-6 leading-8 text-gray-700">${paragraph}</p>`;
       })
       .join('');
+
+    // Process images - MOVED TO THE VERY END to avoid interference
+    html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, src) => {
+      return `
+        <div class="my-8">
+          <img src="${src.trim()}" alt="${alt.trim() || 'Post image'}" class="w-full h-auto rounded-lg shadow-md" loading="lazy" />
+          ${alt.trim() ? `<p class="text-center text-gray-500 text-sm mt-2">${alt.trim()}</p>` : ''}
+        </div>
+      `;
+    });
 
     return html;
   };
