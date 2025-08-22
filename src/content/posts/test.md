@@ -1,15 +1,16 @@
 ---
-title: "Kenyan Content Creator Bryan Moge Steals Hearts with Giant Rose Bouquet for Girlfriend’s 22nd Birthday"
-description: "Lifestyle content creator Bryan Moge went viral after surprising his girlfriend Whitney Wangari with a massive rose bouquet on her 22nd birthday in Nairobi. See the romantic gesture that has Kenyans buzzing!"
+title: "Diamond Platnumz Sparks Romance Rumors with Mystery Lady at Exclusive Nairobi Event"
+description: "Tanzanian superstar Diamond Platnumz was spotted getting cozy with an unidentified woman at a high-profile event in Nairobi, sparking speculation about a new romance. Exclusive photos and details inside."
 author: "Sarah Mwangi"
-date: "2025-08-18"
-image: "https://images.unsplash.com/photo-1518622346868-d1385d9b3e87?w=800&h=600&fit=crop"
-category: "Lifestyle"
-tags: ["Bryan Moge", "Whitney Wangari", "Viral Romance", "Kenya Lifestyle", "Nairobi Events", "Birthday Surprise"]
-slug: "bryan-moge-whitney-wangari-birthday-rose-bouquet"
+date: "2025-08-21"
+image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop"
+category: "Celebrity Gossip"
+tags: ["Diamond Platnumz", "Romance", "Tanzania", "Kenya", "Celebrity News"]
+slug: "diamond-platnumz-romance-rumors-nairobi-event"
 featured: true
-readTime: "2 min read"
+readTime: "3 min read"
 ---
+
 
 # Kenyan Content Creator Bryan Moge Steals Hearts with Giant Rose Bouquet for Girlfriend’s 22nd Birthday
 
