@@ -15,7 +15,7 @@ readTime: "3 min read"
 
 **The Tanzanian music icon was spotted in an intimate moment that has fans buzzing across East Africa.**
 
-https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop
+![Jazz performance photo](https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop)
 *Diamond Platnumz photographed at the exclusive Nairobi event last weekend*
 
 Tanzanian Bongo Flava superstar **Diamond Platnumz** has once again found himself at the center of romance speculation after being photographed in what appeared to be an intimate conversation with a mystery woman at an exclusive event in Nairobi over the weekend.
